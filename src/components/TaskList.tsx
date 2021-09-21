@@ -16,18 +16,16 @@ export function TaskList() {
 
   function handleCreateNewTask() {
     // Crie uma nova task com um id random, não permita criar caso o título seja vazio.
-    if(newTaskTitle == null || newTaskTitle == ""){
-      return
-    }
+    if(!newTaskTitle) return
+
     const tarefa = {
         id: Math.floor(Math.random() * 1000),
         title: newTaskTitle,
         isComplete: false
       }       
-      const listaDeTarefas= tasks.slice()
-      listaDeTarefas.push(tarefa)
 
-      setTasks(listaDeTarefas)  
+      setTasks(oldState => [...tasks, tarefa])
+      setNewTaskTitle("")       
     
   }
 
@@ -36,16 +34,14 @@ export function TaskList() {
     const listaDeTarefas = tasks.slice()
     const index =  listaDeTarefas.findIndex(task => task.id == id)
     
-    listaDeTarefas[index].isComplete ? listaDeTarefas[index].isComplete = false : listaDeTarefas[index].isComplete = true
+    listaDeTarefas[index].isComplete = !listaDeTarefas[index].isComplete
     setTasks(listaDeTarefas)
   }
 
   function handleRemoveTask(id: number) {
     // Remova uma task da listagem pelo ID
-    const listaDeTarefas = tasks.slice()
-    const index =  listaDeTarefas.findIndex(task => task.id == id)
-    listaDeTarefas.splice(index,1)
-    setTasks(listaDeTarefas)
+
+    setTasks(tasks.filter(task => task.id != id))
   }
 
   return (
